@@ -32,11 +32,27 @@ class TestTextNode(unittest.TestCase):
         print(f"Expected: tag={expected.tag}, text={expected.value}, href={expected.props}")
         self.assertEqual(actual, expected)
     
-    """def test_bold_text_node(self):
-        node = LeafNode("bold", "This is categorically not bold")
-        self.assertEqual(node.text_node_to_html(),
-                         "<b>")"""
+    def test_bold_text_node(self):
+        node = TextNode("This is categorically not bold", TextType.BOLD)
+        actual = text_node_to_html_node(node)
+        expected = LeafNode("b", "This is categorically not bold")
+        self.assertEqual(actual, expected)
 
+    def test_links(self):
+        node = TextNode("Google", TextType.LINKS, {"href":"https://www.google.com"})
+        actual = LeafNode("a", "Google", {"href":"https://www.google.com"})
+        expected = text_node_to_html_node(node)
+        self.assertEqual(actual, expected)
+
+    def test_images(self):
+        node = TextNode("A cat", TextType.IMAGES, 
+                        {"src": "https://icatcare.org/app/uploads/2018/07/Thinking-of-getting-a-cat.png",
+                         "alt": "A staring cat"})
+        actual = LeafNode("img", "", 
+                          {"src": "https://icatcare.org/app/uploads/2018/07/Thinking-of-getting-a-cat.png",
+                           "alt": "A staring cat"})
+        expected = text_node_to_html_node(node)
+        self.assertEqual(actual, expected)
 
 if __name__ == "__main__":
     unittest.main()
