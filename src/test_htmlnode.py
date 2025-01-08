@@ -40,6 +40,38 @@ class TestHTMLNode(unittest.TestCase):
                         node.to_html(), 
                         "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>"
                         )
+        
+    def test7(self):
+        node = ParentNode(
+            "p",
+            [
+                LeafNode("b", "This is another bold text"),
+                LeafNode("i", "italic text"),
+                ParentNode(
+                    "p",
+                    [
+                        LeafNode("b", "Yet another bold text but nested"),
+                        LeafNode("i", "Yet another italic text"),
+                        ParentNode(
+                            "p",
+                            [
+                                LeafNode(None, "Just a normal text nested in")
+                            ]
+                        )
+                    ]
+                )
+            ]
+        )
+        expected = node.to_html()
+        actual = "<p><b>This is another bold text</b><i>italic text</i><p><b>Yet another bold text but nested</b><i>Yet another italic text</i><p>Just a normal text nested in</p></p></p>"
+        self.assertEqual(expected, actual)
+        print(f"Expected result {expected}")
+        print("========================================================================")
+        print(f"Actual result {actual}")
+
+    def test8(self):
+        # This will be one without a child node
+        pass
 
     
 if __name__ == "__main__":
