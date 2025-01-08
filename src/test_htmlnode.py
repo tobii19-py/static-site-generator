@@ -65,13 +65,24 @@ class TestHTMLNode(unittest.TestCase):
         expected = node.to_html()
         actual = "<p><b>This is another bold text</b><i>italic text</i><p><b>Yet another bold text but nested</b><i>Yet another italic text</i><p>Just a normal text nested in</p></p></p>"
         self.assertEqual(expected, actual)
-        print(f"Expected result {expected}")
+        print(f"Expected result: {expected}")
         print("========================================================================")
-        print(f"Actual result {actual}")
+        print(f"Actual result: {actual}")
 
     def test8(self):
-        # This will be one without a child node
-        pass
+        with self.assertRaises(ValueError):
+            node = ParentNode("div", [])
+            node.to_html()
+
+    def test9(self):
+        with self.assertRaises(ValueError):
+            node = ParentNode(
+                None,
+                [
+                    LeafNode("b", "Okay what if this is another bold text")
+                ]
+            )
+            node.to_html()
 
     
 if __name__ == "__main__":
