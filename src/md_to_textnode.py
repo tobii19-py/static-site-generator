@@ -16,3 +16,5 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         else:
             # If not normal text, append to textnode list as-is
             textnode_list.append(node_item)
+    
+    return textnode_list
