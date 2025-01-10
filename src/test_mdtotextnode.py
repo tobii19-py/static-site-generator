@@ -1,4 +1,4 @@
-from md_to_textnode import split_nodes_delimiter
+from md_to_textnode import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 from textnode import TextNode, TextType
 import unittest
 
@@ -35,3 +35,18 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             new_nodes,
             [TextNode("`AI definitely wrote this piece of code`", TextType.CODE)]
         )
+
+    def test_ext_md_imgs(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        self.assertEqual(
+            extract_markdown_images(text),
+            [("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")])
+        
+    def test_ext_md_links(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        self.assertEqual(
+            extract_markdown_links(text),
+            [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
+        )
+
+        
