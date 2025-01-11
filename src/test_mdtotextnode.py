@@ -48,5 +48,3 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             extract_markdown_links(text),
             [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
         )
-
-    
