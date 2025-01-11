@@ -59,3 +59,33 @@ def split_nodes_image(old_nodes):
                 image_nodes.extend(follow_nodes)
 
     return image_nodes
+
+def split_nodes_link(old_nodes):
+    link_nodes = []
+
+    for node_item in old_nodes:
+        if not node_item.text:
+            continue
+
+        links = extract_markdown_links(node_item.text)
+
+        if not links:
+            if node_item.text:
+                link_nodes.append(node_item)
+            continue
+        else:
+            link = links[0]
+            anchor = link[0]
+            url = link[1]
+
+            sections = node_item.text.split(f"[{anchor}]({url})", 1)
+
+            if node_item.text:
+                link_nodes.append(TextNode(sections[0], TextType.NORMAL))
+            if anchor:
+                link_nodes.append(TextNode(anchor, TextType.LINKS, url))
+            if sections[1]:
+                remaining_links = split_nodes_link([TextNode(sections[1], TextType.NORMAL)])
+                link_nodes.extend(remaining_links)
+
+    return link_nodes
