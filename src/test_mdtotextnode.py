@@ -1,4 +1,4 @@
-from md_to_textnode import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image
+from md_to_textnode import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link
 from textnode import TextNode, TextType
 import unittest
 
@@ -62,3 +62,15 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         ]
         self.assertEqual(split_nodes_image([node]), result)
 
+    def test_splnd_lnks(self):
+        node = TextNode(
+            "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+            TextType.NORMAL,
+        )
+        result = [
+            TextNode("This is text with a link ", TextType.NORMAL),
+            TextNode("to boot dev", TextType.LINKS, "https://www.boot.dev"),
+            TextNode(" and ", TextType.NORMAL),
+            TextNode("to youtube", TextType.LINKS, "https://www.youtube.com/@bootdotdev")
+        ]
+        self.assertEqual(split_nodes_link([node]), result)
