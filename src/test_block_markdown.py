@@ -1,4 +1,13 @@
-from block_markdown import markdown_to_blocks, block_to_block_type
+from block_markdown import (
+    markdown_to_blocks, 
+    block_to_block_type,
+    block_type_heading,
+    block_type_paragraph,
+    block_type_code,
+    block_type_quote,
+    block_type_olist,
+    block_type_ulist,
+)
 import unittest
 
 class TestBlockMarkdown(unittest.TestCase):
@@ -51,14 +60,11 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
 """
         blocks = markdown_to_blocks(markdown)
         
-        self.assertEqual(block_to_block_type(blocks[0]), 
-                         f"'{blocks[0]}' type is Heading")
+        self.assertEqual(block_to_block_type(blocks[0]), block_type_heading)
         
-        self.assertEqual(block_to_block_type(blocks[1]),
-                         f"'{blocks[1]}' is a regular paragraph")
+        self.assertEqual(block_to_block_type(blocks[1]), block_type_paragraph)
         
-        self.assertEqual(block_to_block_type(blocks[2]),
-                         f"'{blocks[2]}' type is Unordered List")
+        self.assertEqual(block_to_block_type(blocks[2]), block_type_ulist)
         
     def test_ordered_lists(self):
         markdown = """
@@ -67,7 +73,6 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
 3. Third item
 """
         blocks = markdown_to_blocks(markdown)
-        self.assertEqual(block_to_block_type(blocks[0]),
-                         f"'{blocks[0]}' type is Ordered List")
+        self.assertEqual(block_to_block_type(blocks[0]), block_type_olist)
 
 
