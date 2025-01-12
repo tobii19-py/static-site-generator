@@ -1,4 +1,11 @@
-from md_to_textnode import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link
+from md_to_textnode import (
+    split_nodes_delimiter, 
+    extract_markdown_images, 
+    extract_markdown_links, 
+    split_nodes_image, 
+    split_nodes_link,
+    text_to_textnodes,
+)
 from textnode import TextNode, TextType
 import unittest
 
@@ -74,3 +81,42 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode("to youtube", TextType.LINKS, "https://www.youtube.com/@bootdotdev")
         ]
         self.assertEqual(split_nodes_link([node]), result)
+
+    def test_txtto_txtnds(self):
+        text= "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        result = [
+            TextNode("This is ", TextType.NORMAL),
+            TextNode("text", TextType.BOLD),
+            TextNode(" with an ", TextType.NORMAL),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" word and a ", TextType.NORMAL),
+            TextNode("code block", TextType.CODE),
+            TextNode(" and an ", TextType.NORMAL),
+            TextNode("obi wan image", TextType.IMAGES, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and a ", TextType.NORMAL),
+            TextNode("link", TextType.LINKS, "https://boot.dev"),
+        ]
+        self.assertEqual(text_to_textnodes(text), result)
+
+    def test_multi_imgs_txtnds(self):
+        text = "This might be **you wouldn't get it** ![Joker](https://knowyourmeme.com/memes/you-wouldnt-get-it) and ![Tony Stark](https://makeameme.org/meme/you-wouldnt-get-af2cb9e3c0)"
+        result = [
+            TextNode("This might be ", TextType.NORMAL),
+            TextNode("you wouldn't get it", TextType.BOLD),
+            TextNode(" ", TextType.NORMAL),
+            TextNode("Joker", TextType.IMAGES, "https://knowyourmeme.com/memes/you-wouldnt-get-it"),
+            TextNode(" and ", TextType.NORMAL),
+            TextNode("Tony Stark", TextType.IMAGES, "https://makeameme.org/meme/you-wouldnt-get-af2cb9e3c0"),
+        ]
+        self.assertEqual(text_to_textnodes(text), result)
+
+    def test_multi_code_txtnds(self):
+        text = "This is definitely `code` and another `poorly written code`"
+        result = [
+            TextNode("This is definitely ", TextType.NORMAL),
+            TextNode("code", TextType.CODE),
+            TextNode(" and another ", TextType.NORMAL),
+            TextNode("poorly written code", TextType.CODE),
+            TextNode("", TextType.NORMAL)
+        ]
+        self.assertEqual(text_to_textnodes(text), result)
