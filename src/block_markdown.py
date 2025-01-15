@@ -58,6 +58,7 @@ def markdown_to_html_node(text):
         elif block_type == block_type_olist:
             html_node = ParentNode("ol", children=[])
         elif block_type == block_type_code:
+            pre_node = ParentNode("pre", children=[])
             html_node = ParentNode("code", children=[])
 
         
@@ -73,7 +74,12 @@ def markdown_to_html_node(text):
 
             html_node.children = html_children
             div_node.children.append(html_node)
-        elif block_type is block_type_heading:
+        elif block_type == block_type_code:
+            html_children = text_to_children(block)
+            html_node.children = html_children
+            pre_node.children.append(html_node)
+            div_node.children.append(pre_node)
+        elif block_type == block_type_heading:
             body = head[1]
             html_children = text_to_children(body)
             html_node.children = html_children
@@ -101,15 +107,3 @@ def text_to_children(text):
         children_nodes.append(text_node_to_html_node(node))
 
     return children_nodes
-
-markdown = """
-# This is a heading
-
-This is a paragraph of text. It has some **bold** and *italic* words inside of it.
-
-* This is the first list item in a list block
-* This is a list item
-* This is another list item
-"""
-#print()
-markdown_to_html_node(markdown)

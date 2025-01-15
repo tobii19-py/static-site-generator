@@ -1,5 +1,6 @@
 from block_markdown import (
-    markdown_to_blocks, 
+    markdown_to_blocks,
+    markdown_to_html_node,
     block_to_block_type,
     block_type_heading,
     block_type_paragraph,
@@ -8,6 +9,7 @@ from block_markdown import (
     block_type_olist,
     block_type_ulist,
 )
+from htmlnode import ParentNode, LeafNode
 import unittest
 
 class TestBlockMarkdown(unittest.TestCase):
@@ -75,4 +77,37 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
         blocks = markdown_to_blocks(markdown)
         self.assertEqual(block_to_block_type(blocks[0]), block_type_olist)
 
+    def test_mdn_to_html(self):
+        markdown = """
+# This is a heading
 
+This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+* This is the first list item in a list block
+* This is a list item
+* This is another list item
+"""
+        result = ParentNode(
+                "div", [
+                    ParentNode("h1", [
+                        LeafNode(None, "This is a heading", None)
+                    ], None),
+                    ParentNode("p", 
+                    [
+                        LeafNode(None, "This is a paragraph of text. It has some ", None),
+                        LeafNode("b", "bold", None),
+                        LeafNode(None, " and ", None),
+                        LeafNode("i", "italic", None),
+                        LeafNode(None, " words inside of it.", None)
+                    ],
+                    None),
+                    ParentNode("ul",
+                        [
+                            LeafNode("li", "This is the first list item in a list block", None),
+                            LeafNode("li", "This is a list item", None),
+                            LeafNode("li", "This is another list item", None)
+                        ], None
+                    )
+                ],
+            None)
+        self.assertEqual(markdown_to_html_node(markdown), result)
