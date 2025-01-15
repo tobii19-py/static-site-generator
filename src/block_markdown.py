@@ -45,32 +45,37 @@ def markdown_to_html_node(text):
     for block in blocks:
         block_type = block_to_block_type(block)
 
-        if block_type is block_type_paragraph:
+        if block_type == block_type_paragraph:
             html_node = ParentNode("p",children=[])
-        elif block_type is block_type_heading:
+        elif block_type == block_type_heading:
             head = block.split(" ", 1)
             head_tag = heading_type(head[0])
             html_node = ParentNode(head_tag, children=[])
-        elif block_type is block_type_quote:
-            html_node = ParentNode("blockqoute", children=[])
-        elif block_type is block_type_ulist:
+        elif block_type == block_type_quote:
+            html_node = ParentNode("blockquote", children=[])
+        elif block_type == block_type_ulist:
             html_node = ParentNode("ul", children=[])
-        elif block_type is block_type_olist:
+        elif block_type == block_type_olist:
             html_node = ParentNode("ol", children=[])
-        elif block_type is block_type_code:
+        elif block_type == block_type_code:
             html_node = ParentNode("code", children=[])
 
         
         if block_type == (block_type_ulist or block_type_olist):
             list_items = block.split("\n")
-            leaves = []
+            html_children = []
             
             for item in list_items:
                 content = item.split(" ", 1)
-                html_node = LeafNode("li", content[1], None)
-                leaves.append(html_node)
+                if len(content) > 1:
+                    leaf_node = LeafNode("li", content[1], None)
+                    html_children.append(leaf_node)
 
-            div_node.children.extend(leaves)
+            print(html_children)
+            html_node.children = html_children
+
+            print(html_node)
+            div_node.children.append(html_node)
         elif block_type is block_type_heading:
             body = head[1]
             html_children = text_to_children(body)
@@ -99,3 +104,15 @@ def text_to_children(text):
         children_nodes.append(text_node_to_html_node(node))
 
     return children_nodes
+
+markdown = """
+# This is a heading
+
+This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+* This is the first list item in a list block
+* This is a list item
+* This is another list item
+"""
+#print()
+markdown_to_html_node(markdown)
