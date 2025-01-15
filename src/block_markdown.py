@@ -60,15 +60,27 @@ def markdown_to_html_node(text):
         elif block_type is block_type_code:
             html_node = ParentNode("code", children=[])
 
-        if block_type is not block_type_heading:
-            html_children = text_to_children(block)
-            html_node.children = html_children
-            div_node.children.append(html_node)
-        else:
+        
+        if block_type == (block_type_ulist or block_type_olist):
+            list_items = block.split("\n")
+            leaves = []
+            
+            for item in list_items:
+                content = item.split(" ", 1)
+                html_node = LeafNode("li", content[1], None)
+                leaves.append(html_node)
+
+            div_node.children.extend(leaves)
+        elif block_type is block_type_heading:
             body = head[1]
             html_children = text_to_children(body)
             html_node.children = html_children
             div_node.children.append(html_node)
+        else:
+            html_children = text_to_children(block)
+            html_node.children = html_children
+            div_node.children.append(html_node)
+        
         
     return div_node
 
