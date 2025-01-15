@@ -49,7 +49,7 @@ def markdown_to_html_node(text):
             html_node = ParentNode("p",children=[])
         elif block_type is block_type_heading:
             head = block.split(" ", 1)
-            head_tag = heading_type(head)
+            head_tag = heading_type(head[0])
             html_node = ParentNode(head_tag, children=[])
         elif block_type is block_type_quote:
             html_node = ParentNode("blockqoute", children=[])
@@ -60,10 +60,15 @@ def markdown_to_html_node(text):
         elif block_type is block_type_code:
             html_node = ParentNode("code", children=[])
 
-        html_children = text_to_children(block)
-        html_node.children = html_children
-        print(html_node)
-        div_node.children.append(html_node)
+        if block_type is not block_type_heading:
+            html_children = text_to_children(block)
+            html_node.children = html_children
+            div_node.children.append(html_node)
+        else:
+            body = head[1]
+            html_children = text_to_children(body)
+            html_node.children = html_children
+            div_node.children.append(html_node)
         
     return div_node
 
@@ -82,15 +87,3 @@ def text_to_children(text):
         children_nodes.append(text_node_to_html_node(node))
 
     return children_nodes
-
-markdown = """
-# This is a heading
-
-This is a paragraph of text. It has some **bold** and *italic* words inside of it.
-
-* This is the first list item in a list block
-* This is a list item
-* This is another list item
-"""
-node = markdown_to_html_node(markdown)
-print(node)
