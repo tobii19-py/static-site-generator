@@ -61,7 +61,7 @@ def markdown_to_html_node(text):
             html_node = ParentNode("code", children=[])
 
         
-        if block_type == (block_type_ulist or block_type_olist):
+        if block_type in (block_type_ulist, block_type_olist):
             list_items = block.split("\n")
             html_children = []
             
@@ -71,10 +71,7 @@ def markdown_to_html_node(text):
                     leaf_node = LeafNode("li", content[1], None)
                     html_children.append(leaf_node)
 
-            print(html_children)
             html_node.children = html_children
-
-            print(html_node)
             div_node.children.append(html_node)
         elif block_type is block_type_heading:
             body = head[1]
