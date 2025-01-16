@@ -65,9 +65,6 @@ class TestHTMLNode(unittest.TestCase):
         expected = node.to_html()
         actual = "<p><b>This is another bold text</b><i>italic text</i><p><b>Yet another bold text but nested</b><i>Yet another italic text</i><p>Just a normal text nested in</p></p></p>"
         self.assertEqual(expected, actual)
-        print(f"Expected result: {expected}")
-        print("========================================================================")
-        print(f"Actual result: {actual}")
 
     def test8(self):
         with self.assertRaises(ValueError):

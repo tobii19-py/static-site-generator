@@ -28,8 +28,6 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("This may or may not be another normal text", TextType.NORMAL)
         actual = text_node_to_html_node(node)
         expected = LeafNode(None, "This may or may not be another normal text")
-        print(f"Actual: tag={actual.tag}, text={actual.value}, href={actual.props}")
-        print(f"Expected: tag={expected.tag}, text={expected.value}, href={expected.props}")
         self.assertEqual(actual, expected)
     
     def test_bold_text_node(self):

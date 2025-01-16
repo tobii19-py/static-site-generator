@@ -1,5 +1,5 @@
-from htmlnode import HTMLNode, ParentNode, LeafNode
-from textnode import TextNode, text_node_to_html_node
+from htmlnode import ParentNode, LeafNode
+from textnode import text_node_to_html_node
 from inline_markdown import text_to_textnodes
 
 block_type_paragraph = "paragraph"
@@ -69,8 +69,10 @@ def markdown_to_html_node(text):
             for item in list_items:
                 content = item.split(" ", 1)
                 if len(content) > 1:
-                    leaf_node = LeafNode("li", content[1], None)
-                    html_children.append(leaf_node)
+                    parent_list = ParentNode("li", children=[])
+                    list_children = text_to_children(content[1])
+                    parent_list.children = list_children
+                    html_children.append(parent_list)
 
             html_node.children = html_children
             div_node.children.append(html_node)
@@ -107,3 +109,13 @@ def text_to_children(text):
         children_nodes.append(text_node_to_html_node(node))
 
     return children_nodes
+markdown = """
+- This is a list
+- with items
+- and *more* items
+
+1. This is an `ordered` list
+2. with items
+3. and more items
+"""
+markdown_to_html_node(markdown)
