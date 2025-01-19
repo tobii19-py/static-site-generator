@@ -109,13 +109,16 @@ def text_to_children(text):
         children_nodes.append(text_node_to_html_node(node))
 
     return children_nodes
-markdown = """
-- This is a list
-- with items
-- and *more* items
 
-1. This is an `ordered` list
-2. with items
-3. and more items
-"""
-markdown_to_html_node(markdown)
+def extract_title(markdown):
+    lines = markdown.split("\n")
+    
+    for i in range(len(lines)):
+        if lines[i].startswith("# "):
+            content = lines[i].split(" ", 1)
+            return content[1].strip()
+        else:
+            if i != (len(lines) - 1):
+                continue
+            else:
+                raise ValueError("Invalid: No title header for Markdown")

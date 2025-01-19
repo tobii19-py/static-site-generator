@@ -8,6 +8,7 @@ from block_markdown import (
     block_type_quote,
     block_type_olist,
     block_type_ulist,
+    extract_title
 )
 from htmlnode import ParentNode, LeafNode
 import unittest
@@ -137,3 +138,9 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
             html,
             "<div><ul><li>This is a list</li><li>with items</li><li>and <i>more</i> items</li></ul><ol><li>This is an <code>ordered</code> list</li><li>with items</li><li>and more items</li></ol></div>",
         )
+
+    def test_ext_title(self):
+        markdown = """
+This is a trick title with\n# This is the actual Title # this is just there another gotcha
+"""
+        self.assertEqual(extract_title(markdown), "This is the actual Title # this is just there another gotcha")
