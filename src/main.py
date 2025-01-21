@@ -13,7 +13,8 @@ def main():
     for file in copied_files:
         print(f" - {file}")
 
-    generate_page("content/index.md", "template.html", "public/template.html")
+    
+    generate_page("content/index.md", "template.html", "public/index.html")
     
 
 if __name__ == "__main__":

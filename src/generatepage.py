@@ -1,12 +1,8 @@
 import os
-import shutil
 from block_markdown import markdown_to_html_node, extract_title
-from htmlnode import ParentNode
 
 def generate_page(from_path, template_path, dest_path):
-    print("==============================================================================")
     print(f"Generating page from '{from_path}' to '{dest_path}' using '{template_path}'")
-    print("==============================================================================")
 
     with open (from_path) as src_file:
         source = src_file.read()
@@ -22,6 +18,10 @@ def generate_page(from_path, template_path, dest_path):
 
     page = template.replace("{{ Title }}", title).replace("{{ Content }}", content)
 
+    dest_dir_path = os.path.dirname(dest_path)
+    if dest_dir_path != "":
+        os.makedirs(dest_dir_path, exist_ok=True)
+        
     with open(dest_path, "w") as page_file:
         page_file.write(page)
         page_file.close()

@@ -86,6 +86,11 @@ def markdown_to_html_node(text):
             html_children = text_to_children(body)
             html_node.children = html_children
             div_node.children.append(html_node)
+        elif block_type == block_type_quote:
+            quote = block.split(" ", 1)
+            html_children = text_to_children(quote[1])
+            html_node.children = html_children
+            div_node.children.append(html_node)
         else:
             html_children = text_to_children(block)
             html_node.children = html_children
