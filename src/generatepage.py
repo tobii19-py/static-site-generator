@@ -1,6 +1,6 @@
 import os
 import shutil
-from block_markdown import markdown_to_html_node
+from block_markdown import markdown_to_html_node, extract_title
 from htmlnode import ParentNode
 
 def generate_page(from_path, template_path, dest_path):
@@ -16,9 +16,13 @@ def generate_page(from_path, template_path, dest_path):
         template = temp_file.read()
         temp_file.close()
 
-    #print(template)
-
     node = markdown_to_html_node(source)
-    #print(node)
-    html = node.to_html()
-    print(html)
+    content = node.to_html()
+    title = extract_title(source)
+
+    page = template.replace("{{ Title }}", title).replace("{{ Content }}", content)
+
+    with open(dest_path, "w") as page_file:
+        page_file.write(page)
+        page_file.close()
+   
