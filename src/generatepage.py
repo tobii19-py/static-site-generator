@@ -31,33 +31,13 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
     items = os.listdir(dir_path_content)
     
     for item in items:
-        file = os.path.join(dir_path_content, item)
-        from_path = Path(file)
-
+        from_path = os.path.join(dir_path_content, item)
         dest_file = os.path.join(dest_dir_path, item)
-
 
         if os.path.isfile(from_path) == True:
             dest_path = Path(dest_file).with_suffix(".html")
-
-            source = open(from_path, "r")
-            source_content = source.read()
-            source.close()
-
-            template = open(template_path, "r")
-            temp_content = template.read()
-            template.close()
-
-            node = markdown_to_html_node(source_content)
-            content = node.to_html()
-            title = extract_title(source_content)
-
-            page = temp_content.replace("{{ Title }}", title).replace("{{ Content }}", content)
-
-            to_file = open(dest_path, "w")
-            to_file.write(page)
+            generate_page(from_path, template_path, dest_path)
         else:
-            os.makedirs(dest_file, exist_ok=True)
             generate_pages_recursive(from_path, template_path, dest_file)
 
    
