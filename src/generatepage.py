@@ -16,8 +16,9 @@ def generate_page(from_path, template_path, dest_path):
         template = temp_file.read()
         temp_file.close()
 
-    print(template)
+    #print(template)
 
     node = markdown_to_html_node(source)
-    print(node)
-    
+    #print(node)
+    html = node.to_html()
+    print(html)

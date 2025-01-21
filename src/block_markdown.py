@@ -77,8 +77,8 @@ def markdown_to_html_node(text):
             html_node.children = html_children
             div_node.children.append(html_node)
         elif block_type == block_type_code:
-            html_children = text_to_children(block)
-            html_node.children = html_children
+            code_blocks = block.strip("```")
+            html_node = ParentNode("code", [LeafNode(None, code_blocks)])
             pre_node.children.append(html_node)
             div_node.children.append(pre_node)
         elif block_type == block_type_heading:
